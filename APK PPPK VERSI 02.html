@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Slip Gaji PTUN</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 440px; margin: 10px auto; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 11px; background: #fafafa; position: relative; }
+        .kop { display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 5px; margin-bottom: 10px; }
+        .logo-wadah { width: 45px; height: 45px; display: flex; align-items: center; margin-right: 10px; flex-shrink: 0; }
+        .kop-teks { flex-grow: 1; text-align: center; padding-right: 55px; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 5px; align-items: center; }
+        input, select { width: 50%; padding: 3px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        h4 { color: #0d47a1; margin: 10px 0 3px 0; border-left: 3px solid #0d47a1; padding-left: 5px; }
+        .res-box { background: #e3f2fd; padding: 8px; font-weight: bold; margin-top: 10px; display: flex; justify-content: space-between; border-left: 5px solid #0d47a1; }
+        .btn { padding: 5px 10px; font-size: 11px; font-weight: bold; color: white; border: none; border-radius: 4px; cursor: pointer; background: #0d47a1; }
+        .watermark { display: none; }
+
+        @media print {
+            @page { size: A5 portrait; margin: 10mm 10mm; }
+            body { border: none; max-width: 100%; background: #fff; padding: 0; }
+            .no-print { display: none !important; }
+            input, select { border: none !important; background: transparent !important; padding: 0 !important; text-align: right; font-weight: bold; appearance: none; -webkit-appearance: none; color: #000; }
+            .res-box { background: transparent; border: 1px solid #000; border-left-width: 5px; }
+            .kop-teks { padding-right: 0; }
+            .row { border-bottom: 1px dashed #ddd; padding-bottom: 3px; }
+            .watermark { display: block !important; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 60px; font-weight: bold; color: rgba(0, 0, 0, 0.05); z-index: -1000; white-space: nowrap; pointer-events: none; letter-spacing: 4px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="watermark">R A H A S I A</div>
+
+<div class="kop">
+    <div class="logo-wadah">
+        <img src="LOGO PTUN.png" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+    </div>
+    <div class="kop-teks">
+        <h3 style="margin: 0; font-size: 14px; line-height: 1.3;">PENGADILAN TATA USAHA NEGARA TANJUNG PINANG</h3>
+        <p style="font-size: 8px; margin: 2px 0 0 0; color: #333;">Jl. Ir. Sutami No. 03, Kel. Sungai Harapan, Kec. Sekupang, Kota Batam</p>
+    </div>
+</div>
+
+<h3 style="text-align: center; margin: 0 0 8px 0; text-decoration: underline;">SLIP RINCIAN GAJI</h3>
+
+<div style="background:#eee; padding:6px; border-radius:4px; margin-bottom:10px;">
+    <div class="row no-print">Cari Nama: <input type="text" id="keyword" style="width:40%;" placeholder="Nama..."> <button type="button" class="btn" style="background:#0288d1;" onclick="cariData()">🔍 Cari</button></div>
+    <div class="row" style="margin-top:3px;">No WA Kirim: <input type="text" id="no_wa" value="6281234567890"></div>
+    <div class="row" style="margin-top:3px;">Periode Gaji: 
+        <div style="width:50%; display:flex; gap:3px;">
+            <select id="bulan"><option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September" selected>September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option></select>
+            <input type="number" id="tahun" value="2026" style="width:40%; text-align:center;">
+        </div>
+    </div>
+</div>
+
+<form id="gajiForm">
+    <h4>1. Identitas & Penghasilan</h4>
+    <div class="row">Nama Pegawai:<input type="text" id="nama" value="ADJI SURYAPRANATA, S.H"></div>
+    <div class="row">No. Rekening:<input type="text" id="rek" value="7315210563"></div>
+    <div class="row">Gaji Kotor:<input type="number" id="gapok" value="74072761" oninput="hitung()"></div>
+
+    <h4>2. Potongan Negara</h4>
+    <div class="row">BPJS:<input type="number" id="bpjs" value="120000" oninput="hitung()"></div>
+    <div class="row">IWP:<input type="number" id="iwp" value="276801" oninput="hitung()"></div>
+    <div class="row">PPh:<input type="number" id="pph" value="12345460" oninput="hitung()"></div>
+
+    <h4>3. Potongan Internal Kantor</h4>
+    <div class="row">Dansos:<input type="number" id="dansos" value="50000" oninput="hitung()"></div>
+    <div class="row">Bapor:<input type="number" id="bapor" value="100000" oninput="hitung()"></div>
+    <div class="row">Iuran Wajib Kop:<input type="number" id="iurKop" value="0" oninput="hitung()"></div>
+    <div class="row">Angsuran Pinj. Kop:<input type="number" id="angKop" value="0" oninput="hitung()"></div>
+    <div class="row">Simp. Suka Rela:<input type="number" id="sukarela" value="0" oninput="hitung()"></div>
+    <div class="row">PTWP:<input type="number" id="ptwp" value="60000" oninput="hitung()"></div>
+    <div class="row">IPASPI:<input type="number" id="ipaspi" value="0" oninput="hitung()"></div>
+    <div class="row">BPJS TK:<input type="number" id="ikahi" value="80000" oninput="hitung()"></div>
+    <div class="row">DYK:<input type="number" id="dyk" value="332500" oninput="hitung()"></div>
+
+    <div class="res-box">
+        <div>Pot. Negara: <span id="resN">0</span></div>
+        <div>Pot. Kantor: <span id="resK">0</span></div>
+        <div style="color:#0d47a1;">BERSIH: <span id="resB">0</span></div>
+    </div>
+
+    <div style="margin-top:15px; text-align:center; font-style:italic; font-weight:bold; color:#555;">"PTUN Tanjung Pinang Berkarya"</div>
+
+    <div class="no-print" style="margin-top:12px; text-align:center; display:flex; gap:4px; justify-content:center;">
+        <button type="button" class="btn" style="background:#e65100;" onclick="simpanData()">💾 Simpan Data</button>
+        <button type="button" class="btn" style="background:#00bcd4;" onclick="kirimWA()">💬 Kirim WA</button>
+        <button type="button" class="btn" style="background:#28a745;" onclick="window.print()">📄 Simpan PDF</button>
+    </div>
+</form>
+
+<script>
+    const ids = ['no_wa','nama','rek','gapok','bpjs','iwp','pph','dansos','bapor','iurKop','angKop','sukarela','ptwp','ipaspi','ikahi','dyk','bulan','tahun'];
+    let db = JSON.parse(localStorage.getItem('DB_GAJI_PTUN')) || [];
+
+    function Rp(n) { return "Rp " + new Intl.NumberFormat('id-ID').format(n); }
+    function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+    function hitung() {
+        let ntg = v('bpjs') + v('iwp') + v('pph'), ktr = v('dansos') + v('bapor') + v('iurKop') + v('angKop') + v('sukarela') + v('ptwp') + v('ipaspi') + v('ikahi') + v('dyk');
+        let bsh = v('gapok') - (ntg + ktr);
+        document.getElementById('resN').innerText = Rp(ntg);
+        document.getElementById('resK').innerText = Rp(ktr);
+        document.getElementById('resB').innerText = Rp(bsh);
+        return { ntg, ktr, bsh };
+    }
+
+    function simpanData() {
+        let n = document.getElementById('nama').value.trim(); if (!n) return alert("Nama kosong!");
+        let data = {}; ids.forEach(id => data[id] = document.getElementById(id).value);
+        let idx = db.findIndex(p => p.nama && p.nama.toLowerCase() === n.toLowerCase());
+        if (idx > -1) db[idx] = data; else db.push(data);
+        localStorage.setItem('DB_GAJI_PTUN', JSON.stringify(db)); alert("Data disimpan.");
+    }
+
+    function cariData() {
+        let p = db.find(x => x.nama && x.nama.toLowerCase().includes(document.getElementById('keyword').value.trim().toLowerCase()));
+        if (!p) return alert("Tidak ditemukan.");
+        ids.forEach(id => { if(p[id] !== undefined) document.getElementById(id).value = p[id]; }); hitung();
+    }
+
+    function kirimWA() {
+        let d = hitung(), wa = document.getElementById('no_wa').value.trim(); if (wa.length < 10) return alert("No WA salah!");
+        let txt = `*SLIP RINCIAN GAJI ELEKTRONIK*\n*PTUN TANJUNG PINANG*\n*Periode: ${document.getElementById('bulan').value} ${document.getElementById('tahun').value}*\n\n` +
+                  `Yth. *${document.getElementById('nama').value}*\n• Rekening: ${document.getElementById('rek').value}\n• Gaji Kotor: ${Rp(v('gapok'))}\n\n` +
+                  `*POTONGAN NEGARA*\n• BPJS: ${Rp(v('bpjs'))}\n• IWP: ${Rp(v('iwp'))}\n• PPh: ${Rp(v('pph'))}\n*Total:* ${Rp(d.ntg)}\n\n` +
+                  `*POTONGAN KANTOR*\n• Dansos: ${Rp(v('dansos'))}\n• Bapor: ${Rp(v('bapor'))}\n• PTWP: ${Rp(v('ptwp'))}\n• BPJS TK: ${Rp(v('ikahi'))}\n• DYK: ${Rp(v('dyk'))}\n`;
+        
+        ['iurKop','angKop','sukarela','ipaspi'].forEach(id => { if(v(id) > 0) txt += `• ${id}: ${Rp(v(id))}\n`; });
+        txt += `*Total:* ${Rp(d.ktr)}\n\n*TOTAL GAJI BERSIH (TAKE HOME PAY):*\n*▶ ${Rp(d.bsh)}*\n\n_"PTUN Tanjung Pinang Berkarya"_\n`;
+        
+        let enc = encodeURIComponent(txt);
+        let berkendala = true;
+        window.location.href = `whatsapp://send?phone=${wa}&text=${enc}`;
+        setTimeout(function() { if (berkendala) { window.open(`https://whatsapp.com{wa}&text=${enc}`, '_blank'); } }, 1500);
+        window.onblur = function() { berkendala = false; };
+    }
+    window.onload = hitung;
+</script>
+</body>
+</html>
